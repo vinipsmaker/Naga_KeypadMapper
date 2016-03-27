@@ -1,7 +1,7 @@
 /*
  * Apocatarsis 2016
  * Released with absolutely no warranty, use with your own responsibility.
- * 
+ *
  * This version is still in development
  */
 #include <cstdio>
@@ -29,29 +29,29 @@ class NagaDaemon {
 
     vector<vector<string>> args;
     vector<vector<int>> options;
-    
+
     vector<pair<const char *,const char *>> devices;
 public:
     NagaDaemon(int argc, char *argv[]) {
-		devices.emplace_back("/dev/input/by-id/usb-Razer_Razer_Naga_Epic-if01-event-kbd",             "/dev/input/by-id/usb-Razer_Razer_Naga_Epic-event-mouse");              // NAGA EPIC
-		devices.emplace_back("/dev/input/by-id/usb-Razer_Razer_Naga_Epic_Dock-if01-event-kbd",        "/dev/input/by-id/usb-Razer_Razer_Naga_Epic_Dock-event-mouse");         // NAGA EPIC DOCK
-		devices.emplace_back("/dev/input/by-id/usb-Razer_Razer_Naga_2014-if02-event-kbd",             "/dev/input/by-id/usb-Razer_Razer_Naga_2014-event-mouse");              // NAGA 2014
-		devices.emplace_back("/dev/input/by-id/usb-Razer_Razer_Naga-if01-event-kbd",                  "/dev/input/by-id/usb-Razer_Razer_Naga-event-mouse");                   // NAGA MOLTEN
-		devices.emplace_back("/dev/input/by-id/usb-Razer_Razer_Naga_Epic_Chroma-if01-event-kbd",      "/dev/input/by-id/usb-Razer_Razer_Naga_Epic_Chroma-event-mouse");       // NAGA EPIC CHROMA
-		devices.emplace_back("/dev/input/by-id/usb-Razer_Razer_Naga_Epic_Chroma_Dock-if01-event-kbd", "/dev/input/by-id/usb-Razer_Razer_Naga_Epic_Chroma_Dock-event-mouse");  // NAGA EPIC CHROMA DOCK
-		devices.emplace_back("/dev/input/by-id/usb-Razer_Razer_Naga_Chroma-if02-event-kbd",           "/dev/input/by-id/usb-Razer_Razer_Naga_Chroma-event-mouse");            // NAGA CHROMA
-        
+        devices.emplace_back("/dev/input/by-id/usb-Razer_Razer_Naga_Epic-if01-event-kbd",             "/dev/input/by-id/usb-Razer_Razer_Naga_Epic-event-mouse");              // NAGA EPIC
+        devices.emplace_back("/dev/input/by-id/usb-Razer_Razer_Naga_Epic_Dock-if01-event-kbd",        "/dev/input/by-id/usb-Razer_Razer_Naga_Epic_Dock-event-mouse");         // NAGA EPIC DOCK
+        devices.emplace_back("/dev/input/by-id/usb-Razer_Razer_Naga_2014-if02-event-kbd",             "/dev/input/by-id/usb-Razer_Razer_Naga_2014-event-mouse");              // NAGA 2014
+        devices.emplace_back("/dev/input/by-id/usb-Razer_Razer_Naga-if01-event-kbd",                  "/dev/input/by-id/usb-Razer_Razer_Naga-event-mouse");                   // NAGA MOLTEN
+        devices.emplace_back("/dev/input/by-id/usb-Razer_Razer_Naga_Epic_Chroma-if01-event-kbd",      "/dev/input/by-id/usb-Razer_Razer_Naga_Epic_Chroma-event-mouse");       // NAGA EPIC CHROMA
+        devices.emplace_back("/dev/input/by-id/usb-Razer_Razer_Naga_Epic_Chroma_Dock-if01-event-kbd", "/dev/input/by-id/usb-Razer_Razer_Naga_Epic_Chroma_Dock-event-mouse");  // NAGA EPIC CHROMA DOCK
+        devices.emplace_back("/dev/input/by-id/usb-Razer_Razer_Naga_Chroma-if02-event-kbd",           "/dev/input/by-id/usb-Razer_Razer_Naga_Chroma-event-mouse");            // NAGA CHROMA
+
         size = sizeof(struct input_event);
         //Setup check
         for (auto &device : devices) {
-        	if ((side_btn_fd = open(device.first, O_RDONLY)) != -1 &&  (extra_btn_fd = open(device.second, O_RDONLY)) != -1) {
-				cout << "Reading from: " << device.first << " and " << device.second << endl;
-				break;
-			}
+            if ((side_btn_fd = open(device.first, O_RDONLY)) != -1 &&  (extra_btn_fd = open(device.second, O_RDONLY)) != -1) {
+                cout << "Reading from: " << device.first << " and " << device.second << endl;
+                break;
+            }
         }
         if (side_btn_fd == -1 || extra_btn_fd == -1) {
-        	cerr << "No naga devices found or you don't have permission to access them." << endl;
-        	exit(1);
+            cerr << "No naga devices found or you don't have permission to access them." << endl;
+            exit(1);
         }
         //Initialize config
         this->loadConf("mapping_01.txt");
@@ -120,12 +120,12 @@ public:
             if (rd == -1) exit(2);
 
             if (FD_ISSET(side_btn_fd, &readset)) // Side buttons
-            {
-                rd1 = read(side_btn_fd, ev1, size * 64);
-                if (rd1 == -1) exit(2);
+                {
+                    rd1 = read(side_btn_fd, ev1, size * 64);
+                    if (rd1 == -1) exit(2);
 
-                if (ev1[0].value != ' ' && ev1[1].value == 1 && ev1[1].type == 1)  // Only read the key press event
-                    switch (ev1[1].code) {
+                    if (ev1[0].value != ' ' && ev1[1].value == 1 && ev1[1].type == 1)  // Only read the key press event
+                        switch (ev1[1].code) {
                         case 2:
                         case 3:
                         case 4:
@@ -141,24 +141,24 @@ public:
                             chooseAction(ev1[1].code - 2);
                             break;
                             // do nothing on default
-                    }
+                        }
 
-            }
+                }
             else // Extra buttons
-            {
-                rd2 = read(extra_btn_fd, ev2, size * 64);
-                if (rd2 == -1) exit(2);
+                {
+                    rd2 = read(extra_btn_fd, ev2, size * 64);
+                    if (rd2 == -1) exit(2);
 
-                if (ev2[1].type == 1 && ev2[1].value == 1) //Only extra buttons
-                    switch (ev2[1].code) {
+                    if (ev2[1].type == 1 && ev2[1].value == 1) //Only extra buttons
+                        switch (ev2[1].code) {
                         case 275:
                         case 276:
                             chooseAction(ev2[1].code - OFFSET);
                             break;
                             // do nothing on default
-                    }
+                        }
 
-            }
+                }
         }
     }
 
@@ -177,33 +177,33 @@ public:
             //cerr << "key: " << i << " action: " << j << " args: " << args[i][j] << "\n" ;
             execution = true;
             switch (options[i][j]) {
-                case 0: //switch mapping
-                    this->loadConf(args[i][j]);
-                    execution = false;
-                    break;
-                case 1: //key
-                    command = keyop + args[i][j];
-                    break;
-                case 2: //run system command
-                    command = "setsid " + args[i][j] + " &";
-                    break;
-                case 3: //click
-                    command = clickop + args[i][j];
-                    break;
-                case 4: //move to workspace(relative)
-                    command = workspace_r + args[i][j];
-                    break;
-                case 5: //move to workspace(absolute)
-                    command = workspace + args[i][j];
-                    break;
-                case 6: //move cursor to position
-                    command = position + args[i][j];
-                    break;
-                case 7: //delay execution n milliseconds
-                    delay = stoi(args[i][j]) * 1000;
-                    usleep(delay);
-                    execution = false;
-                    break;
+            case 0: //switch mapping
+                this->loadConf(args[i][j]);
+                execution = false;
+                break;
+            case 1: //key
+                command = keyop + args[i][j];
+                break;
+            case 2: //run system command
+                command = "setsid " + args[i][j] + " &";
+                break;
+            case 3: //click
+                command = clickop + args[i][j];
+                break;
+            case 4: //move to workspace(relative)
+                command = workspace_r + args[i][j];
+                break;
+            case 5: //move to workspace(absolute)
+                command = workspace + args[i][j];
+                break;
+            case 6: //move cursor to position
+                command = position + args[i][j];
+                break;
+            case 7: //delay execution n milliseconds
+                delay = stoi(args[i][j]) * 1000;
+                usleep(delay);
+                execution = false;
+                break;
             }
             if (execution)
                 pid = system(command.c_str());

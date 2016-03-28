@@ -17,10 +17,8 @@
 #include <system_error>
 
 #include <fcntl.h>
-#include <dirent.h>
 #include <unistd.h>
 #include <linux/input.h>
-#include <sys/select.h>
 
 #define DEV_NUM_KEYS 12
 #define EXTRA_BUTTONS 2
@@ -73,6 +71,7 @@ struct RaiiFd
 
         fd = o.fd;
         o.fd = -1;
+        return *this;
     }
 
     RaiiFd(const RaiiFd&) = delete;
@@ -158,6 +157,7 @@ public:
 
     void chooseAction(int i) {
         int pid = system(args[i].c_str());
+        (void)(pid);
     }
 };
 

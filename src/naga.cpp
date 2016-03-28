@@ -95,20 +95,20 @@ class NagaDaemon {
     unique_ptr<RaiiFd> side_btn, extra_btn;
 
     vector<string> args {
-        "F13",
-        "F14",
-        "F15",
-        "F16",
-        "F17",
-        "F18",
-        "F19",
-        "F20",
-        "F21",
-        "F22",
-        "F23",
-        "F24",
-        "F13",
-        "F13",
+        "enlightenment_remote -desktop-show 0 0",
+        "enlightenment_remote -desktop-show 1 0",
+        "enlightenment_remote -desktop-show 2 0",
+        "enlightenment_remote -desktop-show 3 0",
+        "enlightenment_remote -desktop-show 4 0",
+        "mpc toggle",
+        "",
+        "",
+        "",
+        "",
+        "bash -c 'echo KeyStr Escape | xmacroplay'",
+        "enlightenment_remote -desktop-lock",
+        "",
+        "",
     };
 
 public:
@@ -197,11 +197,7 @@ public:
     }
 
     void chooseAction(int i) {
-        static const string keyop = "xdotool key --window getactivewindow ";
-
-        string command = keyop + args[i];
-        clog << command << endl;
-        int pid = system(command.c_str());
+        int pid = system(args[i].c_str());
     }
 };
 

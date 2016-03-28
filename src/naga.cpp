@@ -7,6 +7,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <cerrno>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -123,6 +124,9 @@ public:
                 this->side_btn = make_unique<RaiiFd>(move(side_btn));
                 this->extra_btn = make_unique<RaiiFd>(move(extra_btn));
             } catch (const std::system_error &error) {
+                if (error.code().value() == ENOENT)
+                    continue;
+
                 cout << "Reading from: " << device.first << " and "
                      << device.second << '\n' << "Error: " << error.code()
                      << " - " << error.code().message() << endl;

@@ -95,8 +95,8 @@ class NagaDaemon {
         "mpc toggle",
         "",
         "",
-        "",
-        "",
+        "mpc next",
+        "enlightenment_remote -restart",
         "bash -c 'echo KeyStr Escape | xmacroplay'",
         "enlightenment_remote -desktop-lock",
     };

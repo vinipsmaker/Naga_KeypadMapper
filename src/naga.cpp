@@ -93,7 +93,7 @@ class NagaDaemon {
         "enlightenment_remote -desktop-show 3 0",
         "enlightenment_remote -desktop-show 4 0",
         "mpc toggle",
-        "",
+        "mpc shuffle",
         "",
         "mpc next",
         "enlightenment_remote -restart",
